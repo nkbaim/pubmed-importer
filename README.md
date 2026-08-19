@@ -9,6 +9,12 @@
 [![Latest release](https://img.shields.io/github/v/release/nkbaim/pubmed-importer?display_name=tag)](https://github.com/nkbaim/pubmed-importer/releases/latest)
 [![Zotero 9](https://img.shields.io/badge/Zotero-9-cc2936)](https://www.zotero.org/)
 
+## 界面预览
+
+![PubMed 文献检索与导入界面](docs/images/pubmed-search-interface.jpg)
+
+> Zotero 9 深色模式界面；截图中的检索结果为展示用示例数据。
+
 ## 功能
 
 - 支持 PubMed 检索式，并按最佳匹配或发表日期排序
