@@ -1,0 +1,19 @@
+{
+  "addons": {
+    "zotero-pubmed-importer@duyang.dev": {
+      "updates": [
+        {
+          "version": "0.2.0",
+          "update_link": "https://github.com/nkbaim/pubmed-importer/releases/download/v0.2.0/zotero-pubmed-importer-0.2.0.xpi",
+          "update_hash": "sha256:c3c9de4ef41cc56e49fd5ccdb50e03f7da07328a9e9fb5d62fe1eeff04e3308b",
+          "applications": {
+            "zotero": {
+              "strict_min_version": "8.999",
+              "strict_max_version": "10.0.*"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

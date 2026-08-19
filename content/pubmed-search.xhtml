@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://zotero/skin/zotero.css" type="text/css"?>
+<?xml-stylesheet href="pubmed-search.css" type="text/css"?>
+
+<window
+  id="pubmed-search-window"
+  windowtype="zotero:pubmed-importer"
+  title="PubMed Search &amp; Import"
+  width="1120"
+  height="760"
+  orient="vertical"
+  persist="screenX screenY width height"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+  style="display: flex;"
+>
+  <script><![CDATA[
+    Services.scriptloader.loadSubScript("chrome://zotero/content/include.js", this);
+    Services.scriptloader.loadSubScript(
+      document.documentURI.replace("pubmed-search.xhtml", "pubmed-search.js"),
+      this
+    );
+  ]]></script>
+
+  <html:main id="app-shell">
+    <html:header id="app-header">
+      <html:div class="title-block">
+        <html:h1>PubMed</html:h1>
+        <html:div id="target-label"/>
+      </html:div>
+      <html:form id="search-form">
+        <html:input id="query-input" type="search" aria-label="PubMed 检索式" placeholder="PubMed 检索式" autocomplete="off"/>
+        <html:select id="sort-select" aria-label="排序">
+          <html:option value="relevance">最佳匹配</html:option>
+          <html:option value="pub date">最新发表</html:option>
+        </html:select>
+        <html:button id="search-button" type="submit">检索</html:button>
+      </html:form>
+    </html:header>
+
+    <html:section id="result-toolbar" aria-label="检索结果工具栏">
+      <html:label class="select-all-label">
+        <html:input id="select-all" type="checkbox"/>
+        <html:span>选择当前页</html:span>
+      </html:label>
+      <html:div id="result-count">尚无检索结果</html:div>
+      <html:div class="pager">
+        <html:button id="previous-button" class="icon-button" type="button" title="上一页" aria-label="上一页">‹</html:button>
+        <html:span id="page-label">0 / 0</html:span>
+        <html:button id="next-button" class="icon-button" type="button" title="下一页" aria-label="下一页">›</html:button>
+      </html:div>
+    </html:section>
+
+    <html:section id="results-region" aria-live="polite">
+      <html:table id="results-table">
+        <html:colgroup>
+          <html:col class="select-column"/>
+          <html:col class="title-column"/>
+          <html:col class="journal-column"/>
+          <html:col class="date-column"/>
+          <html:col class="id-column"/>
+        </html:colgroup>
+        <html:thead>
+          <html:tr>
+            <html:th/>
+            <html:th>题名与作者</html:th>
+            <html:th>期刊</html:th>
+            <html:th>日期</html:th>
+            <html:th>标识符</html:th>
+          </html:tr>
+        </html:thead>
+        <html:tbody id="result-body"/>
+      </html:table>
+      <html:div id="empty-state">尚无检索结果</html:div>
+    </html:section>
+
+    <html:footer id="app-footer">
+      <html:div id="status-text" role="status"/>
+      <html:div class="footer-actions">
+        <html:span id="selected-count">已选择 0 篇</html:span>
+        <html:button id="close-button" class="secondary" type="button">关闭</html:button>
+        <html:button id="import-button" type="button" disabled="disabled">导入所选文献</html:button>
+      </html:div>
+    </html:footer>
+  </html:main>
+</window>

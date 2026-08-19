@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "PubMed Search & Import for Zotero",
+  "version": "0.2.0",
+  "description": "Search PubMed and import selected records into Zotero.",
+  "author": "Duyang",
+  "homepage_url": "https://github.com/nkbaim/pubmed-importer",
+  "icons": {
+    "48": "icon.svg",
+    "96": "icon.svg"
+  },
+  "applications": {
+    "zotero": {
+      "id": "zotero-pubmed-importer@duyang.dev",
+      "update_url": "https://raw.githubusercontent.com/nkbaim/pubmed-importer/main/updates.json",
+      "strict_min_version": "8.999",
+      "strict_max_version": "10.0.*"
+    }
+  }
+}
