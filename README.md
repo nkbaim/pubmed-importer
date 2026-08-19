@@ -1,9 +1,13 @@
-# PubMed Search & Import for Zotero
+<p align="center">
+  <img src="icon.svg" alt="PubMed Search & Import logo" width="128" height="128">
+</p>
 
-在 Zotero 内直接检索 PubMed、选择文献，并将题录批量导入当前文库或分类。
+<h1 align="center">PubMed Search & Import — Zotero 9 Plugin</h1>
+
+一款专为 **Zotero 9** 设计的 PubMed 文献检索与导入插件。无需离开 Zotero，即可检索 PubMed、筛选文献，并将题录批量导入当前文库或分类。
 
 [![Latest release](https://img.shields.io/github/v/release/nkbaim/pubmed-importer?display_name=tag)](https://github.com/nkbaim/pubmed-importer/releases/latest)
-[![Zotero](https://img.shields.io/badge/Zotero-9–10-cc2936)](https://www.zotero.org/)
+[![Zotero 9](https://img.shields.io/badge/Zotero-9-cc2936)](https://www.zotero.org/)
 
 ## 功能
 
@@ -18,7 +22,7 @@
 
 ## 兼容性
 
-当前清单声明支持 Zotero `8.999` 至 `10.0.*`，即 Zotero 9–10。插件使用 Zotero 8 引入的菜单 API，并按 Zotero 9+ 环境发布。
+本插件面向 **Zotero 9** 开发和发布。插件清单中的最低版本 `8.999` 是 Zotero 9 系列的兼容性边界写法；当前版本以 Zotero 9 作为主要支持环境。
 
 ## 安装
 
