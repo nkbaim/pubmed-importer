@@ -97,9 +97,21 @@ var PubMedSearch = {
       );
       if (serial !== this.requestSerial) return;
 
+      let abstracts = new Map();
+      try {
+        abstracts = await this.fetchAbstracts(pmids);
+      } catch (error) {
+        Zotero.logError(error);
+      }
+      if (serial !== this.requestSerial) return;
+
       const existing = await this.findExistingPMIDs(pmids);
       this.results = pmids
-        .map((pmid) => this.normalizeSummary(summaryData.result?.[pmid], existing.has(pmid)))
+        .map((pmid) => this.normalizeSummary(
+          summaryData.result?.[pmid],
+          existing.has(pmid),
+          abstracts.get(pmid) || ""
+        ))
         .filter(Boolean);
       this.renderResults();
       this.setStatus(`已载入 ${this.results.length} 条记录`);
@@ -119,7 +131,53 @@ var PubMedSearch = {
     return typeof text === "string" ? JSON.parse(text) : text;
   },
 
-  normalizeSummary(summary, existing) {
+  async fetchAbstracts(pmids) {
+    const params = new URLSearchParams({
+      db: "pubmed",
+      id: pmids.join(","),
+      retmode: "xml",
+      tool: "ZoteroPubMedImporter"
+    });
+    const response = await Zotero.HTTP.request(
+      "GET",
+      `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?${params}`,
+      { timeout: 30000 }
+    );
+    return this.parseAbstracts(response.responseText || response.response || "");
+  },
+
+  parseAbstracts(xmlText) {
+    const xml = new DOMParser().parseFromString(xmlText, "application/xml");
+    if (xml.querySelector("parsererror")) {
+      throw new Error("PubMed 返回的摘要数据无法解析");
+    }
+
+    const abstracts = new Map();
+    const records = [
+      ...xml.getElementsByTagName("PubmedArticle"),
+      ...xml.getElementsByTagName("PubmedBookArticle")
+    ];
+    for (const record of records) {
+      const pmid = record.getElementsByTagName("PMID")[0]?.textContent?.trim();
+      const abstract = record.getElementsByTagName("Abstract")[0];
+      if (!pmid || !abstract) continue;
+
+      const sections = [...abstract.getElementsByTagName("AbstractText")]
+        .map((node) => {
+          const text = node.textContent.replace(/\s+/g, " ").trim();
+          const label = node.getAttribute("Label")?.trim();
+          if (!text) return "";
+          return label && !text.toLowerCase().startsWith(`${label.toLowerCase()}:`)
+            ? `${label}: ${text}`
+            : text;
+        })
+        .filter(Boolean);
+      if (sections.length) abstracts.set(pmid, sections.join(" "));
+    }
+    return abstracts;
+  },
+
+  normalizeSummary(summary, existing, abstract) {
     if (!summary?.uid) return null;
     const doi = (summary.articleids || []).find((id) => id.idtype === "doi")?.value || "";
     const authors = (summary.authors || []).map((author) => author.name).filter(Boolean);
@@ -131,6 +189,7 @@ var PubMedSearch = {
       authors,
       journal: summary.fulljournalname || summary.source || "",
       date: rawDate.replace(/\s+00:00$/, ""),
+      abstract,
       existing
     };
   },
@@ -171,6 +230,13 @@ var PubMedSearch = {
         this.textElement("div", "title-text", item.title),
         this.textElement("div", "author-text", this.formatAuthors(item.authors))
       );
+      const abstract = this.textElement(
+        "div",
+        "abstract-text",
+        item.abstract || "暂无摘要"
+      );
+      if (!item.abstract) abstract.classList.add("no-abstract");
+      titleCell.append(abstract);
 
       const journalCell = this.createElement("td");
       journalCell.append(this.textElement("div", "journal-text", item.journal));

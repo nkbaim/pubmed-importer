@@ -222,6 +222,22 @@ tr.existing td {
   line-height: 1.4;
 }
 
+.abstract-text {
+  display: -webkit-box;
+  margin-top: 7px;
+  overflow: hidden;
+  color: var(--fill-primary, #30343a);
+  font-size: 11.5px;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.abstract-text.no-abstract {
+  color: var(--fill-secondary, #6d7278);
+  font-style: italic;
+}
+
 .identifier-text a {
   color: #2f6f73;
   text-decoration: none;

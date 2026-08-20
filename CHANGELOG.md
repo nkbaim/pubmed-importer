@@ -2,6 +2,13 @@
 
 本项目的版本变更记录遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 的结构。
 
+## [0.2.1] - 2026-08-20
+
+### 新增
+
+- 在检索结果中显示最多三行 PubMed 摘要预览。
+- 结构化摘要保留段落标签，无摘要时显示明确提示。
+
 ## [0.2.0] - 2026-08-19
 
 ### 新增
@@ -14,3 +21,4 @@
 - 支持浅色和深色界面。
 
 [0.2.0]: https://github.com/nkbaim/pubmed-importer/releases/tag/v0.2.0
+[0.2.1]: https://github.com/nkbaim/pubmed-importer/releases/tag/v0.2.1

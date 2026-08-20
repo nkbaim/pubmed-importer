@@ -18,7 +18,7 @@
 ## 功能
 
 - 支持 PubMed 检索式，并按最佳匹配或发表日期排序
-- 分页浏览题名、作者、期刊、日期、PMID 和 DOI
+- 分页浏览题名、作者、摘要预览、期刊、日期、PMID 和 DOI
 - 选择当前页或跨页选择多篇文献后批量导入
 - 导入到当前 Zotero 文库或选中的分类
 - 自动识别当前文库内已有的 PMID，避免重复导入
@@ -55,7 +55,7 @@
 
 ## 网络与隐私
 
-检索时，插件会直接访问 NCBI Entrez E-utilities 的 `ESearch` 和 `ESummary` 接口。导入时由 Zotero 内置 PMID 翻译器获取完整题录。插件不包含遥测，不会将 Zotero 文库内容发送到项目作者的服务器。
+检索时，插件会直接访问 NCBI Entrez E-utilities 的 `ESearch`、`ESummary` 和 `EFetch` 接口。`EFetch` 仅用于取得当前结果页的摘要。导入时由 Zotero 内置 PMID 翻译器获取完整题录。插件不包含遥测，不会将 Zotero 文库内容发送到项目作者的服务器。
 
 ## 从源码构建
 
