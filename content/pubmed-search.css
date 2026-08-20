@@ -233,9 +233,23 @@ tr.existing td {
   -webkit-line-clamp: 3;
 }
 
-.abstract-text.no-abstract {
-  color: var(--fill-secondary, #6d7278);
-  font-style: italic;
+.abstract-text.expanded {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: initial;
+}
+
+button.abstract-toggle,
+button.abstract-toggle:hover:not(:disabled) {
+  min-height: 0;
+  margin-top: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #2f6f73;
+  font-size: 11px;
+  line-height: 1.4;
 }
 
 .identifier-text a {

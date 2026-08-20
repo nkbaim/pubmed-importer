@@ -2,6 +2,13 @@
 
 本项目的版本变更记录遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 的结构。
 
+## [0.2.2] - 2026-08-20
+
+### 改进
+
+- 摘要默认显示三行并以省略号截断，可展开查看全文并再次收起。
+- 无摘要的检索结果不再显示占位文字。
+
 ## [0.2.1] - 2026-08-20
 
 ### 新增
@@ -22,3 +29,4 @@
 
 [0.2.0]: https://github.com/nkbaim/pubmed-importer/releases/tag/v0.2.0
 [0.2.1]: https://github.com/nkbaim/pubmed-importer/releases/tag/v0.2.1
+[0.2.2]: https://github.com/nkbaim/pubmed-importer/releases/tag/v0.2.2

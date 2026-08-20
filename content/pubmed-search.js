@@ -230,13 +230,28 @@ var PubMedSearch = {
         this.textElement("div", "title-text", item.title),
         this.textElement("div", "author-text", this.formatAuthors(item.authors))
       );
-      const abstract = this.textElement(
-        "div",
-        "abstract-text",
-        item.abstract || "暂无摘要"
-      );
-      if (!item.abstract) abstract.classList.add("no-abstract");
-      titleCell.append(abstract);
+      if (item.abstract) {
+        const abstract = this.textElement("div", "abstract-text", item.abstract);
+        abstract.id = `pubmed-abstract-${item.pmid}`;
+
+        const toggle = this.createElement("button");
+        toggle.type = "button";
+        toggle.className = "abstract-toggle";
+        toggle.textContent = "展开";
+        toggle.hidden = true;
+        toggle.setAttribute("aria-controls", abstract.id);
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.addEventListener("click", () => {
+          const expanded = abstract.classList.toggle("expanded");
+          toggle.textContent = expanded ? "收起" : "展开";
+          toggle.setAttribute("aria-expanded", String(expanded));
+        });
+
+        titleCell.append(abstract, toggle);
+        window.requestAnimationFrame(() => {
+          toggle.hidden = abstract.scrollHeight <= abstract.clientHeight + 1;
+        });
+      }
 
       const journalCell = this.createElement("td");
       journalCell.append(this.textElement("div", "journal-text", item.journal));
