@@ -96,6 +96,10 @@ macOS 或 Linux 环境需要 `bash`、`node`、`python3`、`zip` 和 `shasum`：
 
 参见 [CHANGELOG.md](CHANGELOG.md)。
 
+## 维护者
+
+- [Yang Du (@nkbaim)](https://github.com/nkbaim)：项目维护与开发
+
 ## 反馈
 
 请通过 [GitHub Issues](https://github.com/nkbaim/pubmed-importer/issues) 报告问题，并附上 Zotero 版本、插件版本和可复现的检索式。
