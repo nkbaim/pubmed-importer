@@ -2,6 +2,12 @@
 
 本项目的版本变更记录遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 的结构。
 
+## [0.2.3] - 2026-08-20
+
+### 改进
+
+- 将重复文献的“已存在”徽标调整为深紫色样式，并适配深色模式。
+
 ## [0.2.2] - 2026-08-20
 
 ### 改进
@@ -30,3 +36,4 @@
 [0.2.0]: https://github.com/nkbaim/pubmed-importer/releases/tag/v0.2.0
 [0.2.1]: https://github.com/nkbaim/pubmed-importer/releases/tag/v0.2.1
 [0.2.2]: https://github.com/nkbaim/pubmed-importer/releases/tag/v0.2.2
+[0.2.3]: https://github.com/nkbaim/pubmed-importer/releases/tag/v0.2.3

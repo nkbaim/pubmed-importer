@@ -265,9 +265,12 @@ button.abstract-toggle:hover:not(:disabled) {
   display: inline-block;
   margin-top: 5px;
   padding: 1px 5px;
-  border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  border: 1px solid color-mix(in srgb, #6d2c91 55%, transparent);
   border-radius: 3px;
+  background: color-mix(in srgb, #6d2c91 14%, transparent);
+  color: #54206f;
   font-size: 10px;
+  font-weight: 600;
 }
 
 #empty-state {
@@ -328,5 +331,11 @@ button.abstract-toggle:hover:not(:disabled) {
 
   :root {
     color: #e8eaed;
+  }
+
+  .existing-badge {
+    border-color: color-mix(in srgb, #b982d8 65%, transparent);
+    background: color-mix(in srgb, #8b4aac 24%, transparent);
+    color: #d8b7eb;
   }
 }
