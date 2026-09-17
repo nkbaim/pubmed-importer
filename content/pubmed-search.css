@@ -263,7 +263,6 @@ button.abstract-toggle:hover:not(:disabled) {
 
 .existing-badge {
   display: inline-block;
-  margin-top: 5px;
   padding: 1px 5px;
   border: 1px solid color-mix(in srgb, #6d2c91 55%, transparent);
   border-radius: 3px;
@@ -271,6 +270,32 @@ button.abstract-toggle:hover:not(:disabled) {
   color: #54206f;
   font-size: 10px;
   font-weight: 600;
+}
+
+.existing-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+a.zotero-url,
+a.zotero-url:visited {
+  display: inline-block;
+  color: #6d2c91;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 550;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+a.zotero-url:hover,
+a.zotero-url:focus-visible {
+  color: #54206f;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 #empty-state {
@@ -336,6 +361,16 @@ button.abstract-toggle:hover:not(:disabled) {
   .existing-badge {
     border-color: color-mix(in srgb, #b982d8 65%, transparent);
     background: color-mix(in srgb, #8b4aac 24%, transparent);
+    color: #d8b7eb;
+  }
+
+  a.zotero-url,
+  a.zotero-url:visited {
+    color: #c69add;
+  }
+
+  a.zotero-url:hover,
+  a.zotero-url:focus-visible {
     color: #d8b7eb;
   }
 }

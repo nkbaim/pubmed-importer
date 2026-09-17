@@ -109,7 +109,7 @@ var PubMedSearch = {
       this.results = pmids
         .map((pmid) => this.normalizeSummary(
           summaryData.result?.[pmid],
-          existing.has(pmid),
+          existing.get(pmid),
           abstracts.get(pmid) || ""
         ))
         .filter(Boolean);
@@ -177,7 +177,7 @@ var PubMedSearch = {
     return abstracts;
   },
 
-  normalizeSummary(summary, existing, abstract) {
+  normalizeSummary(summary, existingItem, abstract) {
     if (!summary?.uid) return null;
     const doi = (summary.articleids || []).find((id) => id.idtype === "doi")?.value || "";
     const authors = (summary.authors || []).map((author) => author.name).filter(Boolean);
@@ -190,19 +190,44 @@ var PubMedSearch = {
       journal: summary.fulljournalname || summary.source || "",
       date: rawDate.replace(/\s+00:00$/, ""),
       abstract,
-      existing
+      existing: Boolean(existingItem),
+      zoteroURL: existingItem ? this.getZoteroSelectURL(existingItem) : ""
     };
   },
 
   async findExistingPMIDs(pmids) {
-    const existing = new Set();
+    const existing = new Map();
     for (const pmid of pmids) {
       const search = new Zotero.Search();
       search.libraryID = this.io.libraryID;
       search.addCondition("PMID", "is", pmid);
-      if ((await search.search()).length) existing.add(pmid);
+      const itemIDs = await search.search();
+      const item = itemIDs
+        .map((itemID) => Zotero.Items.get(itemID))
+        .find((candidate) => candidate?.isRegularItem());
+      if (item) existing.set(pmid, item);
     }
     return existing;
+  },
+
+  getZoteroSelectURL(item) {
+    if (!item?.key) return "";
+    const library = Zotero.Libraries.get(item.libraryID);
+    if (library?.libraryType === "group") {
+      return `zotero://select/groups/${library.libraryTypeID}/items/${item.key}`;
+    }
+    return `zotero://select/library/items/${item.key}`;
+  },
+
+  copyZoteroURL(url) {
+    if (!url) return;
+    try {
+      Zotero.Utilities.Internal.copyTextToClipboard(url);
+      this.setStatus(`已复制 Zotero 链接：${url}`);
+    } catch (error) {
+      Zotero.logError(error);
+      this.setStatus(`复制失败：${this.errorMessage(error)}`);
+    }
   },
 
   renderResults() {
@@ -268,7 +293,25 @@ var PubMedSearch = {
       ids.append(pmidLink);
       if (item.doi) ids.append(this.createElement("br"), document.createTextNode(`DOI ${item.doi}`));
       idCell.append(ids);
-      if (item.existing) idCell.append(this.textElement("span", "existing-badge", "已存在"));
+      if (item.existing) {
+        const existingMeta = this.createElement("div");
+        existingMeta.className = "existing-meta";
+        existingMeta.append(this.textElement("span", "existing-badge", "已存在"));
+        if (item.zoteroURL) {
+          const zoteroLink = this.createElement("a");
+          zoteroLink.href = item.zoteroURL;
+          zoteroLink.className = "zotero-url";
+          zoteroLink.textContent = "Zotero URL";
+          zoteroLink.title = `点击复制：${item.zoteroURL}`;
+          zoteroLink.setAttribute("aria-label", `复制 Zotero 链接 ${item.zoteroURL}`);
+          zoteroLink.addEventListener("click", (event) => {
+            event.preventDefault();
+            this.copyZoteroURL(item.zoteroURL);
+          });
+          existingMeta.append(zoteroLink);
+        }
+        idCell.append(existingMeta);
+      }
 
       row.append(selectCell, titleCell, journalCell, dateCell, idCell);
       body.append(row);
@@ -311,18 +354,26 @@ var PubMedSearch = {
     let imported = 0;
     let skipped = 0;
     let failed = 0;
+    const importedItems = [];
     this.setBusy(true, `正在导入 0 / ${records.length}...`);
 
     for (let index = 0; index < records.length; index++) {
       const record = records[index];
       this.setStatus(`正在导入 ${index + 1} / ${records.length}：PMID ${record.pmid}`);
       try {
-        if ((await this.findExistingPMIDs([record.pmid])).has(record.pmid)) {
+        const existingItem = (await this.findExistingPMIDs([record.pmid])).get(record.pmid);
+        if (existingItem) {
           skipped++;
+          record.existing = true;
+          record.zoteroURL = this.getZoteroSelectURL(existingItem);
         } else {
-          await this.importPMID(record.pmid);
+          const importedItem = await this.importPMID(record.pmid);
+          importedItems.push(importedItem);
           imported++;
+          record.existing = true;
+          record.zoteroURL = this.getZoteroSelectURL(importedItem);
         }
+        this.selected.delete(record.pmid);
       } catch (error) {
         failed++;
         Zotero.logError(error);
@@ -330,13 +381,23 @@ var PubMedSearch = {
       if (index < records.length - 1) await Zotero.Promise.delay(350);
     }
 
-    for (const record of records) {
-      record.existing = true;
-      this.selected.delete(record.pmid);
+    let fullTextError = null;
+    if (importedItems.length) {
+      this.setStatus(`已导入 ${imported} 篇，正在使用 Zotero 查找可用全文...`);
+      try {
+        await Zotero.Attachments.addAvailableFiles(importedItems);
+      } catch (error) {
+        fullTextError = error;
+        Zotero.logError(error);
+      }
     }
+
     this.renderResults();
     this.setBusy(false);
-    this.setStatus(`导入完成：成功 ${imported}，已存在 ${skipped}，失败 ${failed}`);
+    this.setStatus(
+      `导入完成：成功 ${imported}，已存在 ${skipped}，失败 ${failed}` +
+      (fullTextError ? `；全文查找失败：${this.errorMessage(fullTextError)}` : "")
+    );
   },
 
   async importPMID(pmid) {

@@ -3,9 +3,9 @@
     "zotero-pubmed-importer@duyang.dev": {
       "updates": [
         {
-          "version": "0.2.3",
-          "update_link": "https://github.com/nkbaim/pubmed-importer/releases/download/v0.2.3/zotero-pubmed-importer-0.2.3.xpi",
-          "update_hash": "sha256:25a039d5b7e47a50283164bcacc10f5936c2834aa8ebbe18870800a2451ee2b9",
+          "version": "0.3.2",
+          "update_link": "https://github.com/nkbaim/pubmed-importer/releases/download/v0.3.2/zotero-pubmed-importer-0.3.2.xpi",
+          "update_hash": "sha256:d7ad320a8c49b90744f363db0f84574c7a5460a94782627b568498da65f499c6",
           "applications": {
             "zotero": {
               "strict_min_version": "8.999",
